@@ -11,6 +11,7 @@ include ':integration'
 include ':integration:volley'
 include ':integration:okhttp'
 include ':integration:okhttp3'
+include ':integration:palette'
 include ':testutil'
 
 rootProject.name = 'glide-parent'
