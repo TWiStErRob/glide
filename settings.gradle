@@ -15,6 +15,7 @@ include ':integration:okhttp'
 include ':integration:okhttp3'
 include ':integration:gifencoder'
 include ':integration:recyclerview'
+include ':integration:palette'
 include ':testutil'
 
 rootProject.name = 'glide-parent'
