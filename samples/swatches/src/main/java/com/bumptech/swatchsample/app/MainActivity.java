@@ -19,25 +19,25 @@ import com.bumptech.glide.integration.palette.PaletteBitmapTranscoder;
  * @see com.bumptech.swatchsample.app.PaletteAdapter.ViewHolder
  */
 public class MainActivity extends ListActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
 
-        BitmapRequestBuilder<Uri, PaletteBitmap> glideBuilder = Glide
-                .with(this)
-                .from(Uri.class)
-                .asBitmap()
-                .transcode(new PaletteBitmapTranscoder(this), PaletteBitmap.class);
-        Uri[] urls = new LoremPixelUrlGenerator().generateAll();
-        setListAdapter(new PaletteAdapter(urls, glideBuilder));
-    }
+    BitmapRequestBuilder<Uri, PaletteBitmap> glideBuilder = Glide
+        .with(this)
+        .from(Uri.class)
+        .asBitmap()
+        .transcode(new PaletteBitmapTranscoder(this), PaletteBitmap.class);
+    Uri[] urls = new LoremPixelUrlGenerator().generateAll();
+    setListAdapter(new PaletteAdapter(urls, glideBuilder));
+  }
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        Uri uri = (Uri) l.getAdapter().getItem(position);
-        Intent intent = new Intent(this, DetailActivity.class);
-        intent.setData(uri);
-        startActivity(intent);
-    }
+  @Override
+  protected void onListItemClick(ListView l, View v, int position, long id) {
+    Uri uri = (Uri) l.getAdapter().getItem(position);
+    Intent intent = new Intent(this, DetailActivity.class);
+    intent.setData(uri);
+    startActivity(intent);
+  }
 }
