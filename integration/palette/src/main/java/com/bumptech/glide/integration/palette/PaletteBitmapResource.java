@@ -18,6 +18,11 @@ public class PaletteBitmapResource implements Resource<PaletteBitmap> {
   }
 
   @Override
+  public Class<PaletteBitmap> getResourceClass() {
+    return PaletteBitmap.class;
+  }
+
+  @Override
   public PaletteBitmap get() {
     return paletteBitmap;
   }
@@ -29,8 +34,6 @@ public class PaletteBitmapResource implements Resource<PaletteBitmap> {
 
   @Override
   public void recycle() {
-    if (!bitmapPool.put(paletteBitmap.bitmap)) {
-      paletteBitmap.bitmap.recycle();
-    }
+    bitmapPool.put(paletteBitmap.bitmap);
   }
 }

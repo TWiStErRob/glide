@@ -14,11 +14,15 @@ import com.bumptech.glide.load.resource.transcode.ResourceTranscoder;
  * android.support.v7.graphics.Palette}s from {@link android.graphics.Bitmap}s in the background.
  */
 public class PaletteBitmapTranscoder implements ResourceTranscoder<Bitmap, PaletteBitmap> {
+  public interface PaletteGenerator {
+    Palette generate(Bitmap bitmap);
+  }
+
   private final BitmapPool bitmapPool;
-  private final int numColors;
+  private final PaletteGenerator generator;
 
   public PaletteBitmapTranscoder(Context context) {
-    this(context, 16);
+    this(context, new DefaultPaletteGenerator(null));
   }
 
   /**
@@ -26,19 +30,35 @@ public class PaletteBitmapTranscoder implements ResourceTranscoder<Bitmap, Palet
    * @see android.support.v7.graphics.Palette#generate(android.graphics.Bitmap, int)
    */
   public PaletteBitmapTranscoder(Context context, int numColors) {
+    this(context, new DefaultPaletteGenerator(numColors));
+  }
+
+  public PaletteBitmapTranscoder(Context context, PaletteGenerator generator) {
     this.bitmapPool = Glide.get(context).getBitmapPool();
-    this.numColors = numColors;
+    this.generator = generator;
   }
 
   @Override
   public Resource<PaletteBitmap> transcode(Resource<Bitmap> toTranscode) {
-    Palette palette = Palette.generate(toTranscode.get(), numColors);
+    Palette palette = generator.generate(toTranscode.get());
     PaletteBitmap result = new PaletteBitmap(toTranscode.get(), palette);
     return new PaletteBitmapResource(result, bitmapPool);
   }
 
-  @Override
-  public String getId() {
-    return Integer.toString(numColors);
+  private static class DefaultPaletteGenerator implements PaletteGenerator {
+    private final Integer numColors;
+
+    public DefaultPaletteGenerator(Integer numColors) {
+      this.numColors = numColors;
+    }
+
+    @Override
+    public Palette generate(Bitmap bitmap) {
+      Palette.Builder builder = new Palette.Builder(bitmap);
+      if (numColors != null) {
+        builder.maximumColorCount(numColors);
+      }
+      return builder.generate();
+    }
   }
 }

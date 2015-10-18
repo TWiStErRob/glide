@@ -7,10 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
-import com.bumptech.glide.BitmapRequestBuilder;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.integration.palette.PaletteBitmap;
-import com.bumptech.glide.integration.palette.PaletteBitmapTranscoder;
+import com.bumptech.glide.request.BaseRequestOptions;
+import com.bumptech.glide.request.RequestOptions;
 
 /**
  * Displays images loaded from the Internet and adjust colors to them.
@@ -24,13 +25,9 @@ public class MainActivity extends ListActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    BitmapRequestBuilder<Uri, PaletteBitmap> glideBuilder = Glide
-        .with(this)
-        .from(Uri.class)
-        .asBitmap()
-        .transcode(new PaletteBitmapTranscoder(this), PaletteBitmap.class);
     Uri[] urls = new LoremPixelUrlGenerator().generateAll();
-    setListAdapter(new PaletteAdapter(urls, glideBuilder));
+
+    setListAdapter(new PaletteAdapter(urls));
   }
 
   @Override

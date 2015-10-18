@@ -13,7 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.GenericRequestBuilder;
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.integration.palette.PaletteBitmap;
 import com.bumptech.glide.integration.palette.PaletteBitmapViewTarget;
 import com.bumptech.glide.integration.palette.PaletteBitmapViewTarget.Builder;
@@ -24,11 +24,9 @@ import com.bumptech.glide.integration.palette.PaletteBitmapViewTarget.Builder;
  */
 class PaletteAdapter extends BaseAdapter {
   private final Uri[] urls;
-  private final GenericRequestBuilder<Uri, ?, ?, PaletteBitmap> glide;
 
-  public PaletteAdapter(Uri[] urls, GenericRequestBuilder<Uri, ?, ?, PaletteBitmap> glide) {
+  public PaletteAdapter(Uri[] urls) {
     this.urls = urls;
-    this.glide = glide;
   }
 
   @Override
@@ -65,7 +63,13 @@ class PaletteAdapter extends BaseAdapter {
     Uri url = getItem(position);
     holder.titleText.setText(url.getPath());
     holder.bodyText.setText(url.toString());
-    glide.load(url).into(holder.target);
+
+    Glide
+        .with(holder.image.getContext())
+        .as(PaletteBitmap.class)
+        .load(url)
+        .into(holder.target)
+    ;
   }
 
   private static class ViewHolder {
@@ -99,6 +103,12 @@ class PaletteAdapter extends BaseAdapter {
             @Override
             @SuppressWarnings("deprecation")
             public void set(Palette.Swatch swatch) {
+              if (swatch == null) {
+                count.setBackgroundColor(Color.WHITE);
+                count.setTextColor(Color.BLACK);
+                count.setText("N/A");
+                return;
+              }
               ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
               drawable.setIntrinsicWidth(10);
               drawable.setIntrinsicHeight(10);

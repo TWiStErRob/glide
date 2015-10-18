@@ -3,7 +3,9 @@ package com.bumptech.glide.integration.palette;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v7.graphics.Palette;
 import android.util.TypedValue;
 import android.view.View;
@@ -28,8 +30,9 @@ public class PaletteBitmapViewTarget extends ImageViewTarget<PaletteBitmap> {
   }
 
   @Override
-  protected void setResource(PaletteBitmap resource) {
-    view.setImageBitmap(resource.bitmap);
+  protected void setResource(@Nullable PaletteBitmap resource) {
+    Bitmap bitmap = resource != null ? resource.bitmap : null;
+    view.setImageBitmap(bitmap);
   }
 
   /**
@@ -167,7 +170,7 @@ public class PaletteBitmapViewTarget extends ImageViewTarget<PaletteBitmap> {
 
     public Builder background(View view, int alpha) {
       checkCurrent();
-      current.backgrounds.add(new ActionGroup.ViewHolder(view, alpha));
+      current.backgrounds.add(new ActionGroup.ViewBackground(view, alpha));
       return this;
     }
 
@@ -184,10 +187,12 @@ public class PaletteBitmapViewTarget extends ImageViewTarget<PaletteBitmap> {
         private final List<ActionGroup> actions = new ArrayList<ActionGroup>(Builder.this.actions);
 
         @Override
-        protected void setResource(PaletteBitmap resource) {
+        protected void setResource(@Nullable PaletteBitmap resource) {
           super.setResource(resource);
-          for (ActionGroup action : actions) {
-            action.execute(resource.palette);
+          if (resource != null) {
+            for (ActionGroup action : actions) {
+              action.execute(resource.palette);
+            }
           }
         }
       };
@@ -209,7 +214,7 @@ public class PaletteBitmapViewTarget extends ImageViewTarget<PaletteBitmap> {
 
       private final List<TextView> titleTexts = new LinkedList<TextView>();
       private final List<TextView> bodyTexts = new LinkedList<TextView>();
-      private final List<ViewHolder> backgrounds = new LinkedList<ViewHolder>();
+      private final List<ViewBackground> backgrounds = new LinkedList<ViewBackground>();
       private final List<SwatchTarget> customs = new LinkedList<SwatchTarget>();
       private int fallbackBackground;
       private int fallbackTextColor;
@@ -232,7 +237,7 @@ public class PaletteBitmapViewTarget extends ImageViewTarget<PaletteBitmap> {
         }
 
         int backgroundColor = swatch != null ? swatch.getRgb() : fallbackBackground;
-        for (ViewHolder background : backgrounds) {
+        for (ViewBackground background : backgrounds) {
           background.view.setBackgroundColor(background.applyAlpha(backgroundColor));
         }
 
@@ -241,11 +246,11 @@ public class PaletteBitmapViewTarget extends ImageViewTarget<PaletteBitmap> {
         }
       }
 
-      private static class ViewHolder {
+      private static class ViewBackground {
         private View view;
         private int alpha;
 
-        public ViewHolder(View view, int alpha) {
+        public ViewBackground(View view, int alpha) {
           this.view = view;
           this.alpha = alpha;
         }
@@ -255,6 +260,7 @@ public class PaletteBitmapViewTarget extends ImageViewTarget<PaletteBitmap> {
             // already has alpha set, don't modify it
             return color;
           }
+          // return Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
           return color & 0x00FFFFFF | alpha << 24;
         }
       }

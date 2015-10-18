@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.integration.palette.PaletteBitmap;
-import com.bumptech.glide.integration.palette.PaletteBitmapTranscoder;
 import com.bumptech.glide.integration.palette.PaletteBitmapViewTarget;
 import com.bumptech.glide.integration.palette.PaletteBitmapViewTarget.Builder;
 
@@ -25,7 +24,7 @@ public class DetailActivity extends Activity {
 
     View root = findViewById(R.id.layoutRoot);
     ImageView image = (ImageView) findViewById(R.id.image);
-    TextView titleText = (TextView) findViewById(R.id.titleText);
+    TextView title = (TextView) findViewById(R.id.titleText);
     TextView vibrant = (TextView) findViewById(R.id.vibrant);
     TextView muted = (TextView) findViewById(R.id.muted);
     TextView darkVibrant = (TextView) findViewById(R.id.darkVibrant);
@@ -35,22 +34,24 @@ public class DetailActivity extends Activity {
 
     Uri uri = getIntent().getData();
 
-    titleText.setText(uri.getPath());
+    title.setText(uri.getPath());
 
-    Glide.with(this)
+    Glide
+        .with(this)
+        .as(PaletteBitmap.class)
         .load(uri)
-        .asBitmap()
-        .transcode(new PaletteBitmapTranscoder(this, 48), PaletteBitmap.class)
         .into(new PaletteBitmapViewTarget.Builder(image)
-            .defaultFallback(Color.BLACK, Color.WHITE)
+            .defaultFallback(Color.BLACK, Color.YELLOW)
             .swatch(new MaxPopulationSwatchSelector()).background(root)
-            .swatch(Builder.VIBRANT).titleText(titleText).background(titleText, 0x80)
+            .swatch(Builder.VIBRANT).titleText(title).background(title, 0x80)
             .swatch(Builder.MUTED, Color.BLACK, Color.RED).body(muted)
             .swatch(Builder.MUTED_DARK).body(darkMuted)
             .swatch(Builder.MUTED_LIGHT).body(lightMuted)
             .swatch(Builder.VIBRANT, Color.BLACK, Color.RED).body(vibrant)
             .swatch(Builder.VIBRANT_DARK).body(darkVibrant)
             .swatch(Builder.VIBRANT_LIGHT).body(lightVibrant)
-            .build());
+            .build()
+        )
+    ;
   }
 }

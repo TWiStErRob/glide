@@ -15,6 +15,11 @@ class LoremPixelUrlGenerator {
   };
   public static final int DEFAULT_WIDTH = 400;
   public static final int DEFAULT_HEIGHT = 400;
+  /**
+   * Even though http://lorempixel.com/#images shows 20 for most categories, they're not accessible,
+   * so let's use the readily available 10 images per category.
+   * A few images are missing: Fashion 2, Nature 9, Sports 4
+   */
   public static final int MAX_VALID_INDEX = 10;
 
   private final Random random = new Random(0);
