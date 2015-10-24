@@ -1,4 +1,4 @@
-package com.bumptech.swatchsample.app;
+package com.bumptech.glide.samples.palette;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -7,17 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.integration.palette.PaletteBitmap;
-import com.bumptech.glide.request.BaseRequestOptions;
-import com.bumptech.glide.request.RequestOptions;
-
 /**
  * Displays images loaded from the Internet and adjust colors to them.
  *
- * @see com.bumptech.swatchsample.app.MainActivity#onCreate(android.os.Bundle)
- * @see com.bumptech.swatchsample.app.PaletteAdapter.ViewHolder
+ * @see com.bumptech.glide.samples.palette.MainActivity#onCreate(android.os.Bundle)
+ * @see com.bumptech.glide.samples.palette.PaletteAdapter.ViewHolder
  */
 public class MainActivity extends ListActivity {
   @Override

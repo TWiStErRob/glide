@@ -1,4 +1,4 @@
-package com.bumptech.swatchsample.app;
+package com.bumptech.glide.samples.palette;
 
 import static com.bumptech.glide.integration.palette.PaletteTargetBuilder.MUTED;
 import static com.bumptech.glide.integration.palette.PaletteTargetBuilder.MUTED_DARK;

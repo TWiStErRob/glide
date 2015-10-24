@@ -1,4 +1,4 @@
-package com.bumptech.swatchsample.app;
+package com.bumptech.glide.samples.palette;
 
 import android.net.Uri;
 
