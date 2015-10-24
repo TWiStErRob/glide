@@ -80,8 +80,7 @@ class PaletteAdapter extends BaseAdapter {
         .as(PaletteBitmap.class)
         .load(url)
         .transition(new GenericTransitionOptions<PaletteBitmap>().transition(CROSS_FADE_FACTORY))
-        .into(holder.target)
-    ;
+        .into(holder.target);
   }
 
   private static final TransitionFactory<PaletteBitmap> CROSS_FADE_FACTORY
@@ -125,8 +124,7 @@ class PaletteAdapter extends BaseAdapter {
           .apply(PaletteTargetBuilder.MUTED_DARK.as().background(view).bodyText(bodyText))
           .apply(PaletteTargetBuilder.VIBRANT.as().background(titleText, 0x60).titleText(titleText))
           .custom(MAX_POPULATION, new PopulationSwatchTarget(count))
-          .build()
-      ;
+          .build();
     }
   }
 

@@ -11,8 +11,8 @@ import com.bumptech.glide.util.Preconditions;
 
 /**
  * A {@link com.bumptech.glide.request.target.Target} that can display an {@link
- * android.graphics.Bitmap} in an {@link android.widget.ImageView} and additionally set styles
- * of other views based on colors retrieved from a {@link android.support.v7.graphics.Palette}.
+ * android.graphics.Bitmap} in an {@link android.widget.ImageView} and additionally set styles of
+ * other views based on colors retrieved from a {@link android.support.v7.graphics.Palette}.
  *
  * Use the target directly:
  * <code><pre>
@@ -45,7 +45,9 @@ public class PaletteBitmapViewTarget extends ImageViewTarget<PaletteBitmap> {
 
   private final Iterable<PaletteAction> actions;
 
-  public PaletteBitmapViewTarget(@NonNull ImageView view, @NonNull Iterable<PaletteAction> actions) {
+  public PaletteBitmapViewTarget(
+      @NonNull ImageView view,
+      @NonNull Iterable<PaletteAction> actions) {
     super(view);
     this.actions = Preconditions.checkNotNull(actions);
   }

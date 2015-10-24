@@ -55,7 +55,6 @@ public class DetailActivity extends Activity {
             .body(VIBRANT_DARK, darkVibrantView)
             .body(VIBRANT_LIGHT, lightVibrantView)
             .build()
-        )
-    ;
+        );
   }
 }

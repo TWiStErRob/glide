@@ -87,7 +87,10 @@ import java.util.List;
  * </ol>
  */
 public final class PaletteTargetBuilder {
-  public static abstract class BuiltinSwatchSelector implements SwatchSelector {
+  /**
+   * Base class for selecting the 6 built-in Swatches from a Palette.
+   */
+  public abstract static class BuiltinSwatchSelector implements SwatchSelector {
     public ReusableSwatchBuilder as() {
       return preApply(this);
     }
@@ -184,14 +187,19 @@ public final class PaletteTargetBuilder {
     return this.swatch(selector).background(view).finish();
   }
 
-  public PaletteTargetBuilder background(@NonNull SwatchSelector selector, @NonNull View view, int alpha) {
+  public PaletteTargetBuilder background(
+      @NonNull SwatchSelector selector, @NonNull View view, int alpha) {
     return this.swatch(selector).background(view, alpha).finish();
   }
 
-  public PaletteTargetBuilder custom(@NonNull SwatchSelector selector, @NonNull SwatchTarget target) {
+  public PaletteTargetBuilder custom(
+      @NonNull SwatchSelector selector, @NonNull SwatchTarget target) {
     return this.swatch(selector).custom(target).finish();
   }
 
+  /**
+   * A builder should support these applications of a Swatch to certain View properties.
+   */
   public interface SwatchApplier {
     SwatchApplier title(@NonNull TextView view);
 
@@ -208,6 +216,10 @@ public final class PaletteTargetBuilder {
     SwatchApplier custom(@NonNull SwatchTarget target);
   }
 
+  /**
+   * This builder is to allow creating {@link PaletteAction}s in a reusable way. An implementation
+   * of this builder should allow to create multiple distinct and independent actions.
+   */
   public interface ReusableSwatchBuilder extends SwatchApplier {
     ReusableSwatchBuilder title(@NonNull TextView view);
 
@@ -227,6 +239,9 @@ public final class PaletteTargetBuilder {
     PaletteAction build();
   }
 
+  /**
+   * This builder is to allow chaining swatch building amidst {@link PaletteTargetBuilder} calls.
+   */
   public interface SwatchBuilder extends SwatchApplier {
     SwatchBuilder title(@NonNull TextView view);
 

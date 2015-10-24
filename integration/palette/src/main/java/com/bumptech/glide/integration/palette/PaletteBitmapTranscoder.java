@@ -14,6 +14,9 @@ import com.bumptech.glide.load.resource.transcode.ResourceTranscoder;
  * android.support.v7.graphics.Palette}s from {@link android.graphics.Bitmap}s in the background.
  */
 public class PaletteBitmapTranscoder implements ResourceTranscoder<Bitmap, PaletteBitmap> {
+  /**
+   * Extension point to allow for customizing Palette.Builder to generate a Palette.
+   */
   public interface PaletteGenerator {
     Palette generate(Bitmap bitmap);
   }
@@ -33,6 +36,10 @@ public class PaletteBitmapTranscoder implements ResourceTranscoder<Bitmap, Palet
     this(context, new DefaultPaletteGenerator(numColors));
   }
 
+  /**
+   * @param generator custom generator to set up Palette.Builder and generate a Palette
+   * @see android.support.v7.graphics.Palette
+   */
   public PaletteBitmapTranscoder(Context context, PaletteGenerator generator) {
     this.bitmapPool = Glide.get(context).getBitmapPool();
     this.generator = generator;

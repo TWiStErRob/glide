@@ -19,6 +19,9 @@ import com.bumptech.glide.util.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Builder and executor of basic Swatch applications to Views.
+ */
 public class PaletteActionGroup implements SwatchBuilder, ReusableSwatchBuilder, PaletteAction {
   /**
    * Retrieve a swatch from a Palette based on some criteria which the implementors define. It is
@@ -30,8 +33,9 @@ public class PaletteActionGroup implements SwatchBuilder, ReusableSwatchBuilder,
   }
 
   /**
-   * A target that can set its properties based on a {@link Palette.Swatch} such as background, text
-   * color, usually something visual and colorful. Must handle lack of a swatch.
+   * A target that can set its properties (such as background, text color, usually something visual
+   * and colorful) based on a {@link android.support.v7.graphics.Palette.Swatch}. Implementors must
+   * handle lack of a swatch.
    */
   public interface SwatchTarget {
     /**
@@ -59,7 +63,9 @@ public class PaletteActionGroup implements SwatchBuilder, ReusableSwatchBuilder,
     this.selector = Preconditions.checkNotNull(selector);
   }
 
-  protected PaletteActionGroup(@NonNull PaletteTargetBuilder builder, @NonNull SwatchSelector selector) {
+  protected PaletteActionGroup(
+      @NonNull PaletteTargetBuilder builder,
+      @NonNull SwatchSelector selector) {
     this.builder = Preconditions.checkNotNull(builder);
     this.selector = Preconditions.checkNotNull(selector);
   }
@@ -88,7 +94,8 @@ public class PaletteActionGroup implements SwatchBuilder, ReusableSwatchBuilder,
     try {
       return builder.action(this);
     } finally {
-      builder = null; // forget it so its resources can be freed
+      // forget it so its resources can be freed
+      builder = null;
     }
   }
 

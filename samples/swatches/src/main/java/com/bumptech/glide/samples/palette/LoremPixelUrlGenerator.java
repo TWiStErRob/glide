@@ -6,7 +6,9 @@ import java.util.Locale;
 import java.util.Random;
 
 /**
- * Generates random {@link android.net.Uri}s from <a href="http://lorempixel.com">http://lorempixel.com</a>.
+ * Generates random {@link android.net.Uri Uri}s based on Lorempixel's API.
+ *
+ * @see <a href="http://lorempixel.com">http://lorempixel.com</a>.
  */
 class LoremPixelUrlGenerator {
   private static final String[] CATEGORIES = {
@@ -18,7 +20,8 @@ class LoremPixelUrlGenerator {
   /**
    * Even though http://lorempixel.com/#images shows 20 for most categories, they're not accessible,
    * so let's use the readily available 10 images per category.
-   * A few images are missing: Fashion 2, Nature 9, Sports 4
+   *
+   * <br><i>Note: A few images are missing: Fashion 2, Nature 9, Sports 4</i>
    */
   public static final int MAX_VALID_INDEX = 10;
 
@@ -49,7 +52,8 @@ class LoremPixelUrlGenerator {
   }
 
   public static Uri getUrl(int w, int h, String category, int index) {
-    String uri = String.format(Locale.ROOT, "http://lorempixel.com/%d/%d/%s/%d", w, h, category, index);
+    String uri = String.format(Locale.ROOT, "http://lorempixel.com/%d/%d/%s/%d",
+        w, h, category, index);
     return Uri.parse(uri);
   }
 }
