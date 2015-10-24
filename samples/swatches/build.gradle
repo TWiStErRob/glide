@@ -22,7 +22,7 @@ dependencies {
     compile project(':library')
     compile project(':integration:palette')
 
-    compile 'com.android.support:gridlayout-v7:21.0.0'
+    compile "com.android.support:gridlayout-v7:${SUPPORT_V4_VERSION}"
 }
 
 task run(type: Exec, dependsOn: 'installDebug') {

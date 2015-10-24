@@ -26,7 +26,6 @@ public class MainActivity extends ListActivity {
     setContentView(R.layout.activity_main);
 
     Uri[] urls = new LoremPixelUrlGenerator().generateAll();
-
     setListAdapter(new PaletteAdapter(urls));
   }
 
