@@ -2,6 +2,7 @@ package com.bumptech.glide.integration.palette;
 
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.graphics.Palette;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,8 +25,8 @@ import java.util.List;
  *
  * <li>
  *
- * Shorthand style. Simple methods for simple use cases, one Swatch from the Palette is used for a
- * single View's single property.
+ * <b>Shorthand style</b>. Simple methods for simple use cases, one Swatch from the Palette is used
+ * for a single View's single property.
  * <code><pre>
  * .into(new PaletteTargetBuilder(imageView)
  *     .background(MUTED, rootView)
@@ -40,7 +41,7 @@ import java.util.List;
  *
  * <li>
  *
- * Advanced usage to apply a single swatch into multiple items.
+ * <b>Advanced usage</b> to apply a single swatch into multiple items.
  * <code><pre>
  * .into(new PaletteTargetBuilder(imageView)
  *     .swatch(MUTED).background(rootView).title(titleView).finish()
@@ -53,7 +54,7 @@ import java.util.List;
  *
  * <li>
  *
- * Reusable swatch setup which has the benefit of formatting sub-builders better,
+ * <b>Reusable swatch setup</b> which has the benefit of formatting sub-builders better,
  * <code><pre>
  *
  * .into(new PaletteTargetBuilder(imageView)
@@ -71,7 +72,21 @@ import java.util.List;
  *     .build()
  * );
  * </pre></code>
- * Re-using custom selectors and targets:
+ * </li>
+ *
+ * </ol>
+ *
+ * <p>
+ *
+ * <b>Falling back to other swatches</b> if the selected one doesn't exists. In all of the above
+ * examples it's possible to replace <code>MUTED</code> with <code>fallback(MUTED, MUTED_DARK,
+ * MUTED_LIGHT)</code> to use one of the MUTED-type builtin swatches. This works with any selector
+ * combination.
+ *
+ * </p>
+ *
+ *
+ * <b>Re-using custom selectors and targets</b>:
  * <code><pre>
  * PaletteActionGroup.SwatchSelector FANCIEST = ...;
  * PaletteActionGroup.SwatchTarget MY_TARGET = ...;
@@ -81,10 +96,6 @@ import java.util.List;
  *     .build()
  * );
  * </pre></code>
- *
- * </li>
- *
- * </ol>
  */
 public final class PaletteTargetBuilder {
   /**
@@ -147,6 +158,16 @@ public final class PaletteTargetBuilder {
   }
 
   @NonNull
+  public SwatchBuilder swatch(@NonNull SwatchSelector... selector) {
+    return swatch(fallback(selector));
+  }
+
+  @NonNull
+  public static BuiltinSwatchSelector fallback(@NonNull SwatchSelector... selector) {
+    return new FallbackSwatchSelector(selector);
+  }
+
+  @NonNull
   public PaletteTargetBuilder action(@NonNull PaletteAction action) {
     actions.add(action);
     return this;
@@ -160,7 +181,6 @@ public final class PaletteTargetBuilder {
   public static ReusableSwatchBuilder preApply(SwatchSelector selector) {
     return new PaletteActionGroup(selector);
   }
-
 
   public PaletteBitmapViewTarget build() {
     // make a copy in case the user keeps calling Builder methods after build()
@@ -259,5 +279,25 @@ public final class PaletteTargetBuilder {
 
     @NonNull
     PaletteTargetBuilder finish();
+  }
+
+  public static class FallbackSwatchSelector extends BuiltinSwatchSelector {
+    private final SwatchSelector[] selectors;
+
+    public FallbackSwatchSelector(@NonNull SwatchSelector... selectors) {
+      this.selectors = Preconditions.checkNotEmpty(Preconditions.checkNotNull(selectors));
+    }
+
+    @Nullable
+    @Override
+    public Palette.Swatch select(@NonNull Palette palette) {
+      for (SwatchSelector selector : selectors) {
+        Palette.Swatch selected = selector.select(palette);
+        if (selected != null) {
+          return selected;
+        }
+      }
+      return null;
+    }
   }
 }

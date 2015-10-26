@@ -37,6 +37,13 @@ public final class Preconditions {
     return string;
   }
 
+  public static <T> T[] checkNotEmpty(T[] collection) {
+    if (0 < collection.length) {
+      throw new IllegalArgumentException("Must not be empty.");
+    }
+    return collection;
+  }
+
   public static <T extends Collection<Y>, Y> T checkNotEmpty(T collection) {
     if (collection.isEmpty()) {
       throw new IllegalArgumentException("Must not be empty.");

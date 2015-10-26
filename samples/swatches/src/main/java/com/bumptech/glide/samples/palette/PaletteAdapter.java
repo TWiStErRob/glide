@@ -1,5 +1,8 @@
 package com.bumptech.glide.samples.palette;
 
+import static com.bumptech.glide.integration.palette.PaletteTargetBuilder.MUTED_DARK;
+import static com.bumptech.glide.integration.palette.PaletteTargetBuilder.VIBRANT;
+
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -121,8 +124,8 @@ class PaletteAdapter extends BaseAdapter {
       count = (TextView) view.findViewById(R.id.count);
 
       target = new PaletteTargetBuilder(image)
-          .apply(PaletteTargetBuilder.MUTED_DARK.as().background(view).bodyText(bodyText))
-          .apply(PaletteTargetBuilder.VIBRANT.as().background(titleText, 0x60).titleText(titleText))
+          .swatch(MUTED_DARK).background(view).bodyText(bodyText).finish()
+          .swatch(VIBRANT).background(titleText, 0x60).titleText(titleText).finish()
           .custom(MAX_POPULATION, new PopulationSwatchTarget(count))
           .build();
     }

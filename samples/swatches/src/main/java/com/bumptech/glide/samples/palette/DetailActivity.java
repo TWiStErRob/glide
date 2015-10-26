@@ -6,6 +6,7 @@ import static com.bumptech.glide.integration.palette.PaletteTargetBuilder.MUTED_
 import static com.bumptech.glide.integration.palette.PaletteTargetBuilder.VIBRANT;
 import static com.bumptech.glide.integration.palette.PaletteTargetBuilder.VIBRANT_DARK;
 import static com.bumptech.glide.integration.palette.PaletteTargetBuilder.VIBRANT_LIGHT;
+import static com.bumptech.glide.integration.palette.PaletteTargetBuilder.fallback;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.integration.palette.PaletteActionGroup.SwatchSelector;
 import com.bumptech.glide.integration.palette.PaletteBitmap;
 import com.bumptech.glide.integration.palette.PaletteTargetBuilder;
 
@@ -22,6 +24,8 @@ import com.bumptech.glide.integration.palette.PaletteTargetBuilder;
  * Displays an image from an Uri given in the intent and the swatches found for it.
  */
 public class DetailActivity extends Activity {
+  private static final SwatchSelector MAX_POPULATION = new MaxPopulationSwatchSelector();
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -46,14 +50,17 @@ public class DetailActivity extends Activity {
         .as(PaletteBitmap.class)
         .load(uri)
         .into(new PaletteTargetBuilder(imageView)
-            .background(new MaxPopulationSwatchSelector(), rootView)
-            .swatch(VIBRANT).titleText(titleView).background(titleView, 0x80).finish()
+            .background(MAX_POPULATION, rootView)
             .body(MUTED, mutedView)
             .body(MUTED_DARK, darkMutedView)
             .body(MUTED_LIGHT, lightMutedView)
             .body(VIBRANT, vibrantView)
             .body(VIBRANT_DARK, darkVibrantView)
             .body(VIBRANT_LIGHT, lightVibrantView)
+            .apply(fallback(VIBRANT, MUTED, MAX_POPULATION).as()
+                .titleText(titleView)
+                .background(titleView, 0x80)
+            )
             .build()
         );
   }
