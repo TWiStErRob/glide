@@ -432,25 +432,21 @@ public class GifDecoder {
             // and therefore so will our dest array.
             if (previousFrame.dispose == DISPOSAL_BACKGROUND) {
                 // Start with a canvas filled with the background color
-                int c = 0;
-                if (!currentFrame.transparency) {
-                    c = header.bgColor;
-                    if (currentFrame.lct != null && header.bgIndex == currentFrame.transIndex) {
-                        c = 0;
-                    }
-                }
+                int bgColor = getBackgroundColor(currentFrame);
                 // The area used by the graphic must be restored to the background color.
-                int topLeft = previousFrame.iy * width + previousFrame.ix;
-                int bottomLeft = topLeft + previousFrame.ih * width;
-                for (int left = topLeft; left < bottomLeft; left += width) {
-                    int right = left + previousFrame.iw;
-                    for (int pointer = left; pointer < right; pointer++) {
-                        dest[pointer] = c;
-                    }
+                fillRect(dest, previousFrame, bgColor);
+            } else if (previousFrame.dispose == DISPOSAL_PREVIOUS) {
+                if (previousImage != null) {
+                    // Start with the previous frame
+                    int topLeft = previousFrame.iy * width + previousFrame.ix;
+                    previousImage.getPixels(dest, topLeft, width,
+                            previousFrame.ix, previousFrame.iy, previousFrame.iw, previousFrame.ih);
+                } else {
+                    // Clear if there was no previous frame to start with
+                    // This most likely a badly constructed GIF saying it wants to dispose to previous,
+                    // but there was no frame that could be saved as previous
+                    fillRect(dest, previousFrame, 0);
                 }
-            } else if (previousFrame.dispose == DISPOSAL_PREVIOUS && previousImage != null) {
-                // Start with the previous frame
-                previousImage.getPixels(dest, 0, width, 0, 0, width, height);
             }
         }
 
@@ -523,6 +519,29 @@ public class GifDecoder {
         Bitmap result = getNextBitmap();
         result.setPixels(dest, 0, width, 0, 0, width, height);
         return result;
+    }
+
+    private void fillRect(int[] dest, GifFrame frame, int bgColor) {
+        int width = header.width;
+        int topLeft = frame.iy * width + frame.ix;
+        int bottomLeft = topLeft + frame.ih * width;
+        for (int left = topLeft; left < bottomLeft; left += width) {
+            int right = left + frame.iw;
+            for (int pointer = left; pointer < right; pointer++) {
+                dest[pointer] = bgColor;
+            }
+        }
+    }
+
+    private int getBackgroundColor(GifFrame currentFrame) {
+        int color = 0;
+        if (!currentFrame.transparency) {
+            color = header.bgColor;
+            if (currentFrame.lct != null && header.bgIndex == currentFrame.transIndex) {
+                color = 0;
+            }
+        }
+        return color;
     }
 
     /**
