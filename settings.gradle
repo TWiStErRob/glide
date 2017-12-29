@@ -11,7 +11,7 @@ include ':third_party:gif_decoder'
 include ':third_party:disklrucache'
 include ':samples:flickr'
 include ':samples:giphy'
-include ':samples:svg'
+include ':samples:svg
 include ':samples:gallery'
 include ':samples:contacturi'
 include ':samples:imgur'
